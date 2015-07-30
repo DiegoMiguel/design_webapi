@@ -11,6 +11,7 @@ namespace ToDo.Api.Controllers
     /// <summary>
     /// Controller que fornece as operações das tarefas.
     /// </summary>
+    [AutoInvalidateCacheOutput]
     [RoutePrefix("api/todos")]
     public class ToDoController : ApiController
     {

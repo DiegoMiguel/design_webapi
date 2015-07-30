@@ -12,6 +12,7 @@ namespace ToDo.Api.Controllers
     /// <summary>
     /// Controller que fornece as operações dos usuários
     /// </summary>
+    [AutoInvalidateCacheOutput]
     [RoutePrefix("api/users")]
     public class UserController : ApiController
     {
