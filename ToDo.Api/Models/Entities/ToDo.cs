@@ -1,10 +1,11 @@
 ﻿
 using System;
-using System.Threading.Tasks;
-using System.Data.Entity;
 using System.Collections.Generic;
-using System.Linq;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 namespace ToDo.Api.Models.Entities
 {
@@ -20,7 +21,7 @@ namespace ToDo.Api.Models.Entities
         public bool Completed { get; set; }
 
         public Guid UserId { get; set; }
-
+        [IgnoreDataMember]
         public virtual User User { get; set; }
 
         public async Task<ICollection<ToDo>> Get()
@@ -49,12 +50,12 @@ namespace ToDo.Api.Models.Entities
             {
                 var todo = await dbContext.ToDo.FirstOrDefaultAsync(n => n.ToDoId.Equals(todoId) && !n.Completed && n.UserId.Equals(userId) && n.Active) ?? new ToDo();
                 var todoReturn = new ToDo
-                    {
-                        ToDoId = todo.ToDoId,
-                        Description = todo.Description,
-                        Completed = todo.Completed,
-                        UserId = todo.UserId
-                    };
+                {
+                    ToDoId = todo.ToDoId,
+                    Description = todo.Description,
+                    Completed = todo.Completed,
+                    UserId = todo.UserId
+                };
                 return await Task.Run(() => todoReturn);
             }
         }
@@ -88,7 +89,7 @@ namespace ToDo.Api.Models.Entities
                     ToDoId = todo.ToDoId = Guid.NewGuid(),
                     Description = todo.Description,
                     Completed = false,
-                    Active = false,
+                    Active = true,
                     UserId = todo.UserId = userId,
                     CreatedAt = DateTime.Now,
                     UpDatedAt = DateTime.Now

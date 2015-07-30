@@ -8,7 +8,6 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.ModelBinding;
 
 namespace ToDo.Api.Formatter
 {
@@ -18,7 +17,7 @@ namespace ToDo.Api.Formatter
 
         public JilFormatter()
         {
-            _options = new Options(dateFormat: DateTimeFormat.ISO8601, excludeNulls: true);
+            _options = new Options(dateFormat: DateTimeFormat.ISO8601, excludeNulls: true, prettyPrint: true);
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
             SupportedEncodings.Add(new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true));
             SupportedEncodings.Add(new UnicodeEncoding(bigEndian: false, byteOrderMark: true, throwOnInvalidBytes: true));
@@ -66,9 +65,10 @@ namespace ToDo.Api.Formatter
 
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, System.Net.Http.HttpContent content, TransportContext transportContext)
         {
-            using (TextWriter streamWriter = new StreamWriter(writeStream))
+            var jsonString = JSON.Serialize(value, _options);
+            using (TextWriter streamWriter = new StreamWriter(writeStream, Encoding.UTF8, jsonString.Length, true))
             {
-                JSON.Serialize(value, streamWriter, _options);
+                streamWriter.Write(jsonString);
                 return Task.FromResult(writeStream);
             }
         }
