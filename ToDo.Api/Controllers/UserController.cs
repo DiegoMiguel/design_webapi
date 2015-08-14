@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using ToDo.Api.Filters;
 using WebApi.OutputCache.V2;
@@ -27,6 +28,7 @@ namespace ToDo.Api.Controllers
         [CacheOutput(ClientTimeSpan = 60, ServerTimeSpan = 60)]
         [GzipCompression]
         [ResponseType(typeof(ICollection<Models.Entities.User>))]
+        [Authorize]
         public async Task<IHttpActionResult> Get()
         {
             try
@@ -50,6 +52,7 @@ namespace ToDo.Api.Controllers
         [ActionName("GetByUserId")]
         [CacheOutput(ClientTimeSpan = 60, ServerTimeSpan = 60)]
         [ResponseType(typeof(Models.Entities.User))]
+        [Authorize]
         public async Task<IHttpActionResult> Get(Guid userId)
         {
             try
@@ -68,9 +71,11 @@ namespace ToDo.Api.Controllers
         /// </summary>
         /// <param name="user">Informações do usuário</param>
         /// <returns>Retorna o usuário cadastrado</returns>
+        [Authorize]
         [HttpPost]
         [Route("")]
         [ResponseType(typeof(Models.Entities.User))]
+        [AllowAnonymous]
         public async Task<IHttpActionResult> Post([FromBody]Models.Entities.User user)
         {
             try
@@ -97,6 +102,7 @@ namespace ToDo.Api.Controllers
         [HttpPut]
         [Route("{userId:guid}")]
         [ResponseType(typeof(Models.Entities.User))]
+        [Authorize]
         public async Task<IHttpActionResult> Put(Guid userId, [FromBody]Models.Entities.User user)
         {
             try
@@ -121,6 +127,7 @@ namespace ToDo.Api.Controllers
         /// <returns>Retorna Status 200 quando houver sucesso e 400 quando houver um erro</returns>
         [HttpDelete]
         [Route("{userId:guid}")]
+        [Authorize]
         public async Task<IHttpActionResult> Delete(Guid userId)
         {
             try

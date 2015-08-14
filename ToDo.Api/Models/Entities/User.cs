@@ -28,6 +28,11 @@ namespace ToDo.Api.Models.Entities
         [IgnoreDataMember]
         public virtual IList<ToDo> Doings { get; set; }
 
+        [Required(ErrorMessage = "Senha é obrigatória")]
+        [MinLength(4, ErrorMessage = "A senha deve conter pelo menos 4 caracteres")]
+        [MaxLength(6, ErrorMessage = "A senha deve conter no máximo 6 caracteres")]
+        public string Password { get; set; }
+
         public User()
         {
             Doings = new List<ToDo>();
@@ -67,11 +72,21 @@ namespace ToDo.Api.Models.Entities
             }
         }
 
+        public async Task<User> Authenticate(string email, string password)
+        {
+            using (var dbContext = new Context.ToDoContext())
+            {
+                var user = await dbContext.User.FirstOrDefaultAsync(n => n.Email.Equals(email) && n.Password.Equals(password) && n.Active);
+                return await Task.Run(() => user);
+            }
+        }
+
         public async Task<User> Post(User user)
         {
             using (var dbContext = new Context.ToDoContext())
             {
                 user.UserId = Guid.NewGuid();
+                user.Password = user.Password;
                 user.Active = true;
                 user.CreatedAt = DateTime.Now;
                 user.UpDatedAt = DateTime.Now;

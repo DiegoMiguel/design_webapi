@@ -1,9 +1,5 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
-using ToDo.Api.Formatter;
 
 namespace ToDo.Api
 {
@@ -11,10 +7,6 @@ namespace ToDo.Api
     {
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
-            config.Formatters.Clear();
-            config.Formatters.Insert(0, new JilFormatter());
-
             // Web API routes
             config.MapHttpAttributeRoutes();
             config.Routes.MapHttpRoute(

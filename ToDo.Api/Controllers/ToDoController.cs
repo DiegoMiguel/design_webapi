@@ -25,6 +25,7 @@ namespace ToDo.Api.Controllers
         [Route("")]
         [CacheOutput(ClientTimeSpan = 60, ServerTimeSpan = 60)]
         [ResponseType(typeof(ICollection<Models.Entities.ToDo>))]
+        [Authorize]
         public async Task<IHttpActionResult> Get()
         {
             try
@@ -49,6 +50,7 @@ namespace ToDo.Api.Controllers
         [ActionName("GetByToDoId")]
         [CacheOutput(ClientTimeSpan = 60, ServerTimeSpan = 60)]
         [ResponseType(typeof(Models.Entities.ToDo))]
+        [Authorize]
         public async Task<IHttpActionResult> Get(Guid todoId, Guid userId)
         {
             try
@@ -72,6 +74,7 @@ namespace ToDo.Api.Controllers
         [ActionName("GetByUserId")]
         [CacheOutput(ClientTimeSpan = 60, ServerTimeSpan = 60)]
         [ResponseType(typeof(ICollection<Models.Entities.ToDo>))]
+        [Authorize]
         public async Task<IHttpActionResult> Get(Guid userId)
         {
             try
@@ -94,6 +97,7 @@ namespace ToDo.Api.Controllers
         [HttpPost]
         [Route("{userId:guid}")]
         [ResponseType(typeof(Models.Entities.ToDo))]
+        [AllowAnonymous]
         public async Task<IHttpActionResult> Post(Guid userId, [FromBody]Models.Entities.ToDo todo)
         {
             try
@@ -124,6 +128,7 @@ namespace ToDo.Api.Controllers
         [HttpPut]
         [Route("{todoId:guid}")]
         [ResponseType(typeof(Models.Entities.ToDo))]
+        [Authorize]
         public async Task<IHttpActionResult> Put(Guid todoId, [FromBody]Models.Entities.ToDo todo)
         {
             try
@@ -148,6 +153,7 @@ namespace ToDo.Api.Controllers
         /// <returns>Retorna Status 200 quando houver sucesso e 400 quando houver um erro</returns>
         [HttpDelete]
         [Route("{todoId:guid}")]
+        [Authorize]
         public async Task<IHttpActionResult> Delete(Guid todoId)
         {
             try
